@@ -1,13 +1,22 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#include <queue>
 using namespace std;
 
 int main()
 {
+    struct letter {
+        char ch;
+        int frequency;
+        bool operator<(const letter &other) const {
+            return frequency < other.frequency; // max-heap based on frequency
+        }
+    };
     ifstream inputFile("inputText.txt");
     map<char, int> letterFrequency;
     string line;
+    priority_queue<letter> pq;
 
     if (!inputFile) {
         cout << "Error opening Input file" << endl;
@@ -26,6 +35,7 @@ int main()
 
     for (const auto &pair : letterFrequency) {
         cout << pair.first << ": " << pair.second << endl;
+        pq.push({pair.first, pair.second});
     }
 
     ofstream outputFile("outputFrequency.txt");
