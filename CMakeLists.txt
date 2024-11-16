@@ -5,4 +5,5 @@ set(CMAKE_CXX_STANDARD 14)
 
 add_executable(huffman_encoding
     main.cpp
-        huffmantree.h)
+        huffmantree.h
+        huffmantree.cpp)
