@@ -1,11 +1,17 @@
-#include <iostream>
 #include <fstream>
-#include <map>
-#include <queue>
 #include "huffmantree.h"
 
 using namespace std;
 int main() {
+    HuffmanTree huffmanTree;
+
+    // testing the tree
+    huffmanTree.getFrequency();
+
+    huffmanTree.fillPQ();
+
+    huffmanTree.buildHuffmanTree();
+
     return 0;
 }
 

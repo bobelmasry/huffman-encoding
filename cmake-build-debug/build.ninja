@@ -57,6 +57,14 @@ build CMakeFiles/huffman_encoding.dir/main.cpp.o: CXX_COMPILER__huffman_encoding
   TARGET_COMPILE_PDB = CMakeFiles/huffman_encoding.dir/
   TARGET_PDB = huffman_encoding.pdb
 
+build CMakeFiles/huffman_encoding.dir/huffmantree.cpp.o: CXX_COMPILER__huffman_encoding_unscanned_Debug /home/aly/Documents/uni/cs/cpp/huffman-encoding/huffmantree.cpp || cmake_object_order_depends_target_huffman_encoding
+  DEP_FILE = CMakeFiles/huffman_encoding.dir/huffmantree.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles/huffman_encoding.dir
+  OBJECT_FILE_DIR = CMakeFiles/huffman_encoding.dir
+  TARGET_COMPILE_PDB = CMakeFiles/huffman_encoding.dir/
+  TARGET_PDB = huffman_encoding.pdb
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target huffman_encoding
@@ -65,7 +73,7 @@ build CMakeFiles/huffman_encoding.dir/main.cpp.o: CXX_COMPILER__huffman_encoding
 #############################################
 # Link the executable huffman_encoding
 
-build huffman_encoding: CXX_EXECUTABLE_LINKER__huffman_encoding_Debug CMakeFiles/huffman_encoding.dir/main.cpp.o
+build huffman_encoding: CXX_EXECUTABLE_LINKER__huffman_encoding_Debug CMakeFiles/huffman_encoding.dir/main.cpp.o CMakeFiles/huffman_encoding.dir/huffmantree.cpp.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/huffman_encoding.dir
   POST_BUILD = :

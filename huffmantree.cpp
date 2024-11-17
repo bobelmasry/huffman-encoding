@@ -1,5 +1,3 @@
-
-
 #include <iostream>
 #include <fstream>
 #include <map>
@@ -15,6 +13,7 @@ HuffmanTree::HuffmanTree(const HuffmanTree& other) {
     line = other.line;
     pq = other.pq;
 };
+// get letter frequencies
 void HuffmanTree::getFrequency(){
     ifstream inputFile("inputText.txt");
     if (!inputFile) {
@@ -31,12 +30,29 @@ void HuffmanTree::getFrequency(){
     }
     inputFile.close();
 }
-
+// fill the priority queue
 void HuffmanTree::fillPQ()
 {
     for (const auto &pair : letterFrequency) {
         cout << pair.first << ": " << pair.second << endl;
         pq.push({pair.first, pair.second});}
+}
+
+void HuffmanTree::buildHuffmanTree() {
+    while (pq.size() > 1) {
+        letter* left = new letter(pq.top()); pq.pop();
+        letter* right = new letter(pq.top()); pq.pop();
+
+        // create a combined node
+        letter* combined = new letter('\0', left->frequency + right->frequency); //'\0' here is a null character
+        combined->left = left;
+        combined->right = right;
+
+        pq.push(*combined);
+    }
+    letter* root = new letter(pq.top()); pq.pop();
+
+    this->root = root;
 }
 
 void HuffmanTree::output()
@@ -51,6 +67,3 @@ void HuffmanTree::output()
         cout << "Error opening output file" << endl;
     }
 }
-
-
-
