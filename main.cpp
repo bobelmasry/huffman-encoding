@@ -12,6 +12,8 @@ int main() {
 
     huffmanTree.buildHuffmanTree();
 
+    huffmanTree.printCodes();
+
     return 0;
 }
 

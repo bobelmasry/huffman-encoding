@@ -39,6 +39,8 @@ public:
     void fillPQ(); //fill the priority queue
     void output(); //outputs to text file
     void buildHuffmanTree(); //transforms the priority queue into a tree
+    void generateCodes(letter* node, string code, map<char, string> &codes);
+    void printCodes();
     // HuffmanTree& operator=(const HuffmanTree& other) {
     //     return *this;
     // };

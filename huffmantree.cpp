@@ -67,3 +67,29 @@ void HuffmanTree::output()
         cout << "Error opening output file" << endl;
     }
 }
+
+void HuffmanTree::generateCodes(letter *node, string code, map<char, string> &codes) {
+    if (!node) return;
+
+    // if node is a leaf
+    if (node-> ch != '\0') {
+        codes[node->ch] = code;
+    }
+
+    // traverse left adding 0 and traversing right adding 1
+    generateCodes(node->left, code + "0", codes);
+    generateCodes(node->right, code + "1", codes);
+}
+
+void HuffmanTree::printCodes() {
+    map <char, string> codes;
+    generateCodes(this->root, "", codes);
+
+    //output the codes
+
+    cout << "huffman codes: " << endl;
+    for (const auto &pair : codes) {
+        cout << pair.first << ": " << pair.second << endl;
+    }
+}
+
