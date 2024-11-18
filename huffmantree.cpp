@@ -17,7 +17,7 @@ HuffmanTree::HuffmanTree(const HuffmanTree& other) {
 void HuffmanTree::getFrequency(){
     ifstream inputFile("inputText.txt");
     if (!inputFile) {
-        cout << "Error opening Input file" << endl;
+        cout << "Error opening Input File" << endl;
         return;
     }
     while (getline(inputFile, line)) {

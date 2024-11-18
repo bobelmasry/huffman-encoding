@@ -1,3 +1,3 @@
-/home/aly/Documents/uni/cs/cpp/huffman-encoding/cmake-build-debug/CMakeFiles/huffman_encoding.dir
-/home/aly/Documents/uni/cs/cpp/huffman-encoding/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/aly/Documents/uni/cs/cpp/huffman-encoding/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/youse/CLionProjects/huffman-encoding/cmake-build-debug/CMakeFiles/huffman_encoding.dir
+C:/Users/youse/CLionProjects/huffman-encoding/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/youse/CLionProjects/huffman-encoding/cmake-build-debug/CMakeFiles/rebuild_cache.dir

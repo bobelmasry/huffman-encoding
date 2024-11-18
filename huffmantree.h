@@ -15,11 +15,7 @@ private:
         letter* left;
         letter* right; // used to make the tree
 
-        letter(char c, int freq) {
-            ch = c;
-            frequency = freq;
-            left = nullptr;
-            right = nullptr;
+        letter(char c, int freq):ch(c),frequency(freq),left(nullptr),right(nullptr) {
         }
 
         bool operator<(const letter &other) const {
