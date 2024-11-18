@@ -17,8 +17,6 @@ private:
 
         letter(char c, int freq):ch(c),frequency(freq),left(nullptr),right(nullptr) {
         }
-        letter(char c, int freq,letter *l,letter *r):ch(c),frequency(freq),left(l),right(r) {
-        }
 
         bool operator<(const letter &other) const {
             return frequency > other.frequency; // bigger than as max heap
