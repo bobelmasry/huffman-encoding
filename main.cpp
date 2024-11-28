@@ -11,8 +11,9 @@ int main() {
     huffmanTree.fillPQ();
 
     huffmanTree.buildHuffmanTree();
-
-    huffmanTree.printCodes();
+    huffmanTree.output();
+huffmanTree.EncodeAndSave();
+// huffmanTree.LoadAndDecode();
 
     return 0;
 }

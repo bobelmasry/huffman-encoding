@@ -30,13 +30,16 @@ private:
 public:
     HuffmanTree();
     ~HuffmanTree();
-    HuffmanTree(const HuffmanTree& other);
+    HuffmanTree(const HuffmanTree& );
     void getFrequency(); //get the frequency of all letters and store them in a map
     void fillPQ(); //fill the priority queue
-    void output(); //outputs to text file
     void buildHuffmanTree(); //transforms the priority queue into a tree
-    void generateCodes(letter* node, string code, map<char, string> &codes);
-    void printCodes();
+    void generateCodes(letter* , string , map<char, string> &);
+    void SaveHuffFile(const map<char,string>&,const string &);
+    void EncodeAndSave();
+    void LoadAndDecode();
+void output();
+void printCodes();
     // HuffmanTree& operator=(const HuffmanTree& other) {
     //     return *this;
     // };
