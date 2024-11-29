@@ -32,8 +32,8 @@ private:
 
 public:
     HuffmanTree();
-    ~HuffmanTree();
     HuffmanTree(const HuffmanTree &);
+    ~HuffmanTree();
     void getFrequency();     // get the frequency of all letters and store them in a map
     void buildHuffmanTree(); // transforms the priority queue into a tree
     void generateCodes(letter *, string, map<char, string> &);

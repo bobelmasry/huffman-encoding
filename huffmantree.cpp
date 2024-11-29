@@ -3,8 +3,6 @@
 #include <map>
 #include <queue>
 #include "huffmantree.h"
-#include <cstdint>
-#include <bitset>
 using namespace std;
 
 HuffmanTree::HuffmanTree() {};
@@ -87,19 +85,16 @@ void HuffmanTree::generateCodes(letter *node, string code, map<char, string> &co
 void HuffmanTree::CompressFileData()
 {
     map<char, string> codes;
+    string compressedData;
+    bool firstline = 1;
     generateCodes(this->root, "", codes);
-
     // Read the input text and encode it
     ifstream inputFile("inputText.txt");
     if (!inputFile)
     {
-        cerr << "Error opening inputText.txt for reading" << endl;
+        cout << "Error opening inputText.txt for reading" << endl;
         return;
     }
-
-    string compressedData;
-    string line;
-    bool firstline = 1;
 
     while (getline(inputFile, line))
     {
@@ -116,15 +111,24 @@ void HuffmanTree::CompressFileData()
         {
             compressedData += codes['\n']; // Add newline
         }
-
         firstline = 0;
     }
-    cout << "Compressed data: " << compressedData << endl;
     inputFile.close();
+    cout << "Compressed data: " << compressedData << endl;
 }
 
+void Zip()
+{
+    //TODO
+    // Get the compressed data and Huffman Tree THEN write it to a file USING BITS (Which is difficult)
 
-
+}
+void UnZip()
+{
+    //TODO
+    // Decode the compressed data and Huffman Tree THEN write it to a file USING BITS (Which is difficult)
+    
+}
 //DEBUGGING FUNCTIONS
 void HuffmanTree::PrintCodes()
 {
