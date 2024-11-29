@@ -35,18 +35,15 @@ public:
     ~HuffmanTree();
     HuffmanTree(const HuffmanTree &);
     void getFrequency();     // get the frequency of all letters and store them in a map
-    void fillPQ();           // fill the priority queue
     void buildHuffmanTree(); // transforms the priority queue into a tree
     void generateCodes(letter *, string, map<char, string> &);
-    void SaveHuffFile(const map<char, string> &, const string &);
-    void EncodeAndSave();
-    void LoadAndDecode();
+    void CompressFileData();
+    void Zip();
+    void UnZip();
     //DEBUGGING FUNCTIONS
-    void outputfreq();
-    void printCodes();
-    // HuffmanTree& operator=(const HuffmanTree& other) {
-    //     return *this;
-    // };
+    void PrintFrequency();
+    void PrintCodes();
+    
 };
 
 #endif // HUFFMANTREE_H
