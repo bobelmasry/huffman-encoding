@@ -19,12 +19,15 @@ private:
         letter(char c, int freq) : ch(c), frequency(freq), left(nullptr), right(nullptr)
         {
         }
-
+        letter(char c) : ch(c), frequency(0), left(nullptr), right(nullptr)
+        {
+        }
         bool operator<(const letter &other) const
         {
             return frequency > other.frequency; // bigger than as max heap
         }
     };
+
     letter *root; // root of the tree
     map<char, int> letterFrequency;
     string line;
@@ -33,20 +36,20 @@ private:
 public:
     HuffmanTree();
     HuffmanTree(const HuffmanTree &);
-
-    void SaveCompressedFile(const string &outputFilename);
-
     ~HuffmanTree();
-    void getFrequency();     // get the frequency of all letters and store them in a map
+    void getFrequency(const string &);     // get the frequency of all letters and store them in a map
     void buildHuffmanTree(); // transforms the priority queue into a tree
-    void generateCodes(letter *, string, map<char, string> &);
-    void CompressFileData();
-    void Zip();
-    void UnZip();
-    //DEBUGGING FUNCTIONS
+    void ReBuildHuffmanTree(const map<string, char> &); // transforms the laod file into a tree
+    void generateCodeMap(letter *, string, map<char, string> &);
+    void Zip(const string &);
+    void EncodeInput(const string &);
+    void SaveCompressedFile(const string &,const string &);    
+    void UnZip(const string &);
+    void DecodeCompressedFile(const string &, const string &);
+    // DEBUGGING FUNCTIONS
     void PrintFrequency();
     void PrintCodes();
-    
+   
 };
 
 #endif // HUFFMANTREE_H

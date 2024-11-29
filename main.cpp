@@ -7,12 +7,7 @@ int main()
     HuffmanTree huffmanTree;
 
     // testing the tree
-    huffmanTree.getFrequency();
-    huffmanTree.buildHuffmanTree();
-    huffmanTree.PrintCodes();
-    huffmanTree.PrintFrequency();
-    huffmanTree.CompressFileData();
-
-    huffmanTree.SaveCompressedFile("compressed.bin");
+    huffmanTree.Zip("inputText");
+    huffmanTree.UnZip("inputText.huff");
     return 0;
 }

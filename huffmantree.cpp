@@ -8,6 +8,7 @@
 using namespace std;
 
 HuffmanTree::HuffmanTree() {};
+
 HuffmanTree::HuffmanTree(const HuffmanTree &other)
 {
     letterFrequency = other.letterFrequency;
@@ -15,34 +16,36 @@ HuffmanTree::HuffmanTree(const HuffmanTree &other)
     pq = other.pq;
 };
 
-
-void HuffmanTree::getFrequency()
+void HuffmanTree::getFrequency(const string &filename)
 {
-    ifstream inputFile("inputText.txt");
-    if (!inputFile)
+    ifstream inputFile(filename + ".txt");
+    if (inputFile)
+    {
+        bool firstline = 1;
+        while (getline(inputFile, line))
+        {
+            for (char ch : line)
+            {
+                ch = tolower(ch);
+                letterFrequency[ch]++;
+            }
+            if (!firstline)
+            {
+                letterFrequency['\n']++; // Add newline
+            }
+            firstline = 0; // Add newline
+        }
+        inputFile.close();
+        // Filling the priority queue
+        for (const auto &pair : letterFrequency)
+        {
+            pq.push({pair.first, pair.second});
+        }
+    }
+    else
     {
         cout << "Error opening Input File" << endl;
         return;
-    }
-    bool firstline = 1;
-    while (getline(inputFile, line))
-    {
-        for (char ch : line)
-        {
-            ch = tolower(ch);
-            letterFrequency[ch]++;
-        }
-        if (!firstline)
-        {
-            letterFrequency['\n']++; // Add newline
-        }
-        firstline=0; // Add newline
-    }
-    inputFile.close();
-    //Filling the priority queue
-    for (const auto &pair : letterFrequency)
-    {
-        pq.push({pair.first, pair.second});
     }
 }
 
@@ -68,7 +71,32 @@ void HuffmanTree::buildHuffmanTree()
     this->root = root;
 }
 
-void HuffmanTree::generateCodes(letter *node, string code, map<char, string> &codes)
+void HuffmanTree::ReBuildHuffmanTree(const map<string, char> &reverseCodes)
+{
+    root = new letter('\0');
+    for (const auto &[code, ch] : reverseCodes)
+    {
+        letter *current = root;
+        for (char bit : code)
+        {
+            if (bit == '0')
+            {
+                if (!current->left)
+                    current->left = new letter('\0');
+                current = current->left;
+            }
+            else
+            {
+                if (!current->right)
+                    current->right = new letter('\0');
+                current = current->right;
+            }
+        }
+        current->ch = ch;
+    }
+}
+
+void HuffmanTree::generateCodeMap(letter *node, string code, map<char, string> &codes)
 {
     if (!node)
         return;
@@ -80,88 +108,43 @@ void HuffmanTree::generateCodes(letter *node, string code, map<char, string> &co
     }
 
     // traverse left adding 0 and traversing right adding 1
-    generateCodes(node->left, code + "0", codes);
-    generateCodes(node->right, code + "1", codes);
+    generateCodeMap(node->left, code + "0", codes);
+    generateCodeMap(node->right, code + "1", codes);
 }
 
-void HuffmanTree::CompressFileData()
+void HuffmanTree::EncodeInput(const string &filename)
 {
     map<char, string> codes;
+    generateCodeMap(this->root, "", codes);
     string compressedData;
     bool firstline = 1;
-    generateCodes(this->root, "", codes);
     // Read the input text and encode it
-    ifstream inputFile("inputText.txt");
-    if (!inputFile)
+    ifstream inputFile(filename + ".txt");
+    if (inputFile)
     {
-        cout << "Error opening inputText.txt for reading" << endl;
-        return;
-    }
-
-    while (getline(inputFile, line))
-    {
-        for (char ch : line)
+        while (getline(inputFile, line))
         {
-            ch = tolower(ch); // Handle case sensitivity
-            compressedData += codes[ch];
-            if (ch == ' ') // Add space
+            for (char ch : line)
             {
-                compressedData += codes[' '];
+                ch = tolower(ch); // Handle case sensitivity
+                compressedData += codes[ch];
+                if (ch == ' ') // Add space
+                {
+                    compressedData += codes[' '];
+                }
             }
+            if (!firstline)
+            {
+                compressedData += codes['\n']; // Add newline
+            }
+            firstline = 0;
         }
-        if (!firstline)
-        {
-            compressedData += codes['\n']; // Add newline
-        }
-        firstline = 0;
+        inputFile.close();
     }
-    inputFile.close();
-    cout << "Compressed data: " << compressedData << endl;
-}
-
-void Zip()
-{
-    //TODO
-    // Get the compressed data and Huffman Tree THEN write it to a file USING BITS (Which is difficult)
-
-}
-void UnZip()
-{
-    //TODO
-    // Decode the compressed data and Huffman Tree THEN write it to a file USING BITS (Which is difficult)
-    
-}
-//DEBUGGING FUNCTIONS
-void HuffmanTree::PrintCodes()
-{
-    map<char, string> codes;
-    generateCodes(this->root, "", codes);
-
-    // output the codes
-
-    cout << "Huffman Codes: " << endl;
-    for (const auto &pair : codes)
+    else
     {
-        cout << pair.first << ": " << pair.second << endl;
-    }
-}
-void HuffmanTree::PrintFrequency()
-{
-    cout << "Frequency of letters: " << endl;
-    for (const auto &pair : letterFrequency)
-    {
-        if (pair.first == '\n')
-        {
-            cout << "\\n"
-                 << ": " << pair.second << endl;
-        }
-        else if (pair.first == ' ')
-        {
-            cout << "\\s"
-                 << ": " << pair.second << endl;
-        }
-        else
-            cout << pair.first << ": " << pair.second << endl;
+        cout << "Error opening"<< filename+".txt"  <<" for reading" << endl;
+        return;
     }
 }
 
@@ -180,16 +163,16 @@ void WriteBinaryString(ofstream &outputFile, const string &binaryString)
     }
 }
 
-void HuffmanTree::SaveCompressedFile(const string &outputFilename)
+void HuffmanTree::SaveCompressedFile(const string &inputFilename, const string &outputFilename)
 {
     map<char, string> codes;
     string compressedData;
-    generateCodes(this->root, "", codes);
+    generateCodeMap(this->root, "", codes);
 
-    ifstream inputFile("inputText.txt");
+    ifstream inputFile(inputFilename + ".txt");
     if (!inputFile)
     {
-        cout << "Error opening inputText.txt for reading" << endl;
+        cout << "Error opening" << inputFilename + ".txt" << "for reading" << endl;
         return;
     }
 
@@ -243,8 +226,139 @@ void HuffmanTree::SaveCompressedFile(const string &outputFilename)
     }
 
     outputFile.close();
-    cout << "Compressed data saved to " << outputFilename << endl;
+    cout << "Successful Zipping To: " << outputFilename << endl;
+}
+
+void HuffmanTree::DecodeCompressedFile(const string &inputFilename, const string &outputFilename)
+{
+    ifstream inputFile(inputFilename, ios::binary);
+    if (!inputFile)
+    {
+        cout << "Error opening " << inputFilename << " for reading" << endl;
+        return;
+    }
+
+    // Read the padding byte
+    char padding;
+    inputFile.get(padding);
+
+    // Read the number of codes
+    char codeCount;
+    inputFile.get(codeCount);
+
+    // Reconstruct the Huffman code map
+    map<string, char> reverseCodes;
+    for (int i = 0; i < static_cast<unsigned char>(codeCount); ++i)
+    {
+        char ch;
+        inputFile.get(ch);
+
+        char codeSize;
+        inputFile.get(codeSize);
+
+        string codeBits;
+        for (int j = 0; j < static_cast<unsigned char>(codeSize); j += 8)
+        {
+            char byte;
+            inputFile.get(byte);
+            bitset<8> bits(byte);
+            codeBits += bits.to_string();
+        }
+
+        reverseCodes[codeBits.substr(0, static_cast<unsigned char>(codeSize))] = ch;
+    }
+    
+    // Build the Huffman tree from the codes
+    ReBuildHuffmanTree(reverseCodes);
+
+    // Read the compressed data
+    string binaryData;
+    while (inputFile.peek() != EOF)
+    {
+        char byte;
+        inputFile.get(byte);
+        bitset<8> bits(byte);
+        binaryData += bits.to_string();
+    }
+
+    // Remove the padding bits from the end
+    binaryData = binaryData.substr(0, binaryData.size() - padding);
+
+    // Decode the binary data using the Huffman tree
+    ofstream outputFile(outputFilename);
+    if (!outputFile)
+    {
+        cout << "Error opening " << outputFilename << " for writing" << endl;
+        return;
+    }
+
+    letter *current = root;
+    for (char bit : binaryData)
+    {
+        current = (bit == '0') ? current->left : current->right;
+
+        // If a leaf node is reached, output the character
+        if (!current->left && !current->right)
+        {
+            outputFile.put(current->ch);
+            current = root;
+        }
+    }
+
+    inputFile.close();
+    outputFile.close();
+    cout << "Successful UnZipping of :"<< inputFilename <<"\nTo: "<< outputFilename << endl;
+};
+
+void HuffmanTree::Zip(const string &filename)
+{
+    getFrequency(filename);
+    buildHuffmanTree();
+    EncodeInput(filename);
+    SaveCompressedFile(filename+".txt", filename+".huff");
+}
+
+void HuffmanTree::UnZip(const string &filename)
+{
+
+    DecodeCompressedFile(filename , "Decompressed.txt");
+}
+
+// DEBUGGING FUNCTIONS
+
+void HuffmanTree::PrintCodes()
+{
+    map<char, string> codes;
+    generateCodeMap(this->root, "", codes);
+
+    // output the codes
+
+    cout << "Huffman Codes: " << endl;
+    for (const auto &pair : codes)
+    {
+        cout << pair.first << ": " << pair.second << endl;
+    }
+}
+
+void HuffmanTree::PrintFrequency()
+{
+    cout << "Frequency of letters: " << endl;
+    for (const auto &pair : letterFrequency)
+    {
+        if (pair.first == '\n')
+        {
+            cout << "\\n"
+                 << ": " << pair.second << endl;
+        }
+        else if (pair.first == ' ')
+        {
+            cout << "\\s"
+                 << ": " << pair.second << endl;
+        }
+        else
+            cout << pair.first << ": " << pair.second << endl;
+    }
 }
 
 
-HuffmanTree::~HuffmanTree() = default;
+HuffmanTree::~HuffmanTree() {};
