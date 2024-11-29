@@ -3,6 +3,8 @@
 #include <map>
 #include <queue>
 #include "huffmantree.h"
+#include <string>
+#include <bitset>
 using namespace std;
 
 HuffmanTree::HuffmanTree() {};
@@ -163,4 +165,86 @@ void HuffmanTree::PrintFrequency()
     }
 }
 
-HuffmanTree::~HuffmanTree() {};
+void WriteBinaryString(ofstream &outputFile, const string &binaryString)
+{
+    int padding = (8 - binaryString.size() % 8) % 8; // calculating padding
+    string paddedBinary = binaryString + string(padding, '0');
+
+    // add padding at the start of file
+    outputFile.put(padding);
+
+    for (size_t i = 0; i < paddedBinary.size(); i += 8)
+    {
+        bitset<8> byte(paddedBinary.substr(i, 8));
+        outputFile.put(static_cast<unsigned char>(byte.to_ulong()));
+    }
+}
+
+void HuffmanTree::SaveCompressedFile(const string &outputFilename)
+{
+    map<char, string> codes;
+    string compressedData;
+    generateCodes(this->root, "", codes);
+
+    ifstream inputFile("inputText.txt");
+    if (!inputFile)
+    {
+        cout << "Error opening inputText.txt for reading" << endl;
+        return;
+    }
+
+    while (getline(inputFile, line))
+    {
+        for (char ch : line)
+        {
+            ch = tolower(ch);
+            compressedData += codes[ch];
+        }
+        compressedData += codes['\n']; // adding a newline
+    }
+    inputFile.close();
+
+    // Calculate padding
+    int padding = (8 - compressedData.size() % 8) % 8;
+    string paddedBinary = compressedData + string(padding, '0'); // adding padding
+
+    ofstream outputFile(outputFilename, ios::binary);
+    if (!outputFile)
+    {
+        cout << "Error opening " << outputFilename << " for writing" << endl;
+        return;
+    }
+
+    outputFile.put(static_cast<char>(padding));
+
+    outputFile.put(static_cast<char>(codes.size()));
+
+    for (const auto &pair : codes)
+    {
+        outputFile.put(pair.first);
+        outputFile.put(static_cast<char>(pair.second.size())); // each code is 1 byte
+
+        string codeBits = pair.second;
+        while (codeBits.size() % 8 != 0)
+            codeBits += "0"; // padding for the code
+
+        for (size_t i = 0; i < codeBits.size(); i += 8)
+        {
+            bitset<8> byte(codeBits.substr(i, 8));
+            outputFile.put(static_cast<unsigned char>(byte.to_ulong()));
+        }
+    }
+
+    // save data as binary
+    for (size_t i = 0; i < paddedBinary.size(); i += 8)
+    {
+        bitset<8> byte(paddedBinary.substr(i, 8));
+        outputFile.put(static_cast<unsigned char>(byte.to_ulong()));
+    }
+
+    outputFile.close();
+    cout << "Compressed data saved to " << outputFilename << endl;
+}
+
+
+HuffmanTree::~HuffmanTree() = default;

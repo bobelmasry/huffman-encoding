@@ -33,6 +33,9 @@ private:
 public:
     HuffmanTree();
     HuffmanTree(const HuffmanTree &);
+
+    void SaveCompressedFile(const string &outputFilename);
+
     ~HuffmanTree();
     void getFrequency();     // get the frequency of all letters and store them in a map
     void buildHuffmanTree(); // transforms the priority queue into a tree

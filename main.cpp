@@ -13,5 +13,6 @@ int main()
     huffmanTree.PrintFrequency();
     huffmanTree.CompressFileData();
 
+    huffmanTree.SaveCompressedFile("compressed.bin");
     return 0;
 }
