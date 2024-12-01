@@ -8,4 +8,5 @@ add_executable(
     main.cpp
         huffmantree.h
         huffmantree.cpp)
+        enable_testing()
         add_subdirectory(Tests)

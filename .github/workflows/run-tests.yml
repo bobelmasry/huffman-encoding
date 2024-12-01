@@ -42,10 +42,6 @@ jobs:
     - name: Build with CMake
       run: cmake --build build
 
-    # Step 8: List build directory contents (for debugging)
-    - name: List build directory contents
-      run: ls -R build
-
-    # Step 9: Run Google Tests
+    # Step 8: Run Google Tests
     - name: Run Tests
-      run: cd build && ctest --verbose
+      run: cd build && ../Tests/file_compression_tests
