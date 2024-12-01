@@ -44,4 +44,4 @@ jobs:
 
     # Step 8: Run Google Tests
     - name: Run Tests
-      run: cd build && ../Tests/file_compression_tests
+      run: cd build && ./Tests/file_compression_tests
