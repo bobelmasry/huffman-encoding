@@ -1,0 +1,47 @@
+name: CMake Build and Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Check out the repository
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    # Step 2: Set up CMake
+    - name: Set up CMake
+      uses: jwlawson/actions-setup-cmake@v1
+
+    # Step 3: Install dependencies
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y build-essential
+
+    # Step 4: Create inputText.txt and add content
+    - name: Create inputText.txt file
+      run: echo "This is some sample text for testing." > inputText.txt
+
+    # Step 5: Create a build directory
+    - name: Create build directory
+      run: mkdir -p build
+
+    # Step 6: Configure CMake project
+    - name: Configure CMake
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+
+    # Step 7: Build the project
+    - name: Build with CMake
+      run: cmake --build build
+
+    # Step 8: Run Google Tests
+    - name: Run Tests
+      run: cd build && ctest --verbose

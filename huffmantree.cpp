@@ -21,19 +21,11 @@ void HuffmanTree::getFrequency(const string &filename)
     ifstream inputFile(filename + ".txt");
     if (inputFile)
     {
-        bool firstline = 1;
-        while (getline(inputFile, line))
+        char ch;
+        while (inputFile.get(ch))
         {
-            for (char ch : line)
-            {
-                ch = tolower(ch);
+                // ch = tolower(ch);
                 letterFrequency[ch]++;
-            }
-            if (!firstline)
-            {
-                letterFrequency['\n']++; // Add newline
-            }
-            firstline = 0; // Add newline
         }
         inputFile.close();
         // Filling the priority queue
@@ -117,28 +109,17 @@ void HuffmanTree::EncodeInput(const string &filename)
     map<char, string> codes;
     generateCodeMap(this->root, "", codes);
     string compressedData;
-    bool firstline = 1;
+    int firstline = 2;
     // Read the input text and encode it
     ifstream inputFile(filename + ".txt");
     if (inputFile)
     {
-        while (getline(inputFile, line))
+        char ch;
+        while (inputFile.get(ch))
         {
-            for (char ch : line)
-            {
-                ch = tolower(ch); // Handle case sensitivity
+                // ch = tolower(ch); // Handle case sensitivity
                 compressedData += codes[ch];
-                if (ch == ' ') // Add space
-                {
-                    compressedData += codes[' '];
-                }
-            }
-            if (!firstline)
-            {
-                compressedData += codes['\n']; // Add newline
-            }
-            firstline = 0;
-        }
+        };
         inputFile.close();
     }
     else
@@ -175,15 +156,10 @@ void HuffmanTree::SaveCompressedFile(const string &inputFilename, const string &
         cout << "Error opening" << inputFilename + ".txt" << "for reading" << endl;
         return;
     }
-
-    while (getline(inputFile, line))
+    char ch;
+    while (inputFile.get(ch))
     {
-        for (char ch : line)
-        {
-            ch = tolower(ch);
             compressedData += codes[ch];
-        }
-        compressedData += codes['\n']; // adding a newline
     }
     inputFile.close();
 
@@ -315,7 +291,7 @@ void HuffmanTree::Zip(const string &filename)
     getFrequency(filename);
     buildHuffmanTree();
     EncodeInput(filename);
-    SaveCompressedFile(filename+".txt", filename+".huff");
+    SaveCompressedFile(filename, filename+".huff");
 }
 
 void HuffmanTree::UnZip(const string &filename)
