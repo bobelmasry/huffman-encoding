@@ -48,8 +48,8 @@ bool areFilesIdentical(const std::string& filePath1, const std::string& filePath
 }
 
 TEST(FileComparatorTest, FilesAreIdentical) {
-    std::string filePath1 = "../huffman-encoding/inputText.txt";
-    std::string filePath2 = "../huffman-encoding/Decompressed.txt";
+    std::string filePath1 = "inputText.txt";
+    std::string filePath2 = "Decompressed.txt";
 
     ASSERT_TRUE(areFilesIdentical(filePath1, filePath2)) << "Files are not identical!";
 }
