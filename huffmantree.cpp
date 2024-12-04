@@ -287,7 +287,7 @@ void HuffmanTree::DecodeCompressedFile(const string &inputFilename, const string
     cout << "\033[32mSuccessful UnZipping of :"<< inputFilename <<"\nTo: "<< outputFilename << endl;
 };
 
-void HuffmanTree::Zip( string &filename)
+void HuffmanTree::Zip(string filename)
 {
     getFrequency(filename);
     buildHuffmanTree();
