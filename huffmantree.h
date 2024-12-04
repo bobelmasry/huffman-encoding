@@ -31,7 +31,7 @@ private:
     letter *root; // root of the tree
     map<char, int> letterFrequency;
     string line;
-    pq priority_queue<letter>;
+    priority_queue<letter> pq;
 
 public:
     HuffmanTree();
