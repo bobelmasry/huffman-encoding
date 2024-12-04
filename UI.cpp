@@ -43,13 +43,16 @@ void UI()
          cin.ignore(numeric_limits<streamsize>::max(), '\n');
          getline(cin, fileName);
          double oldSize, newSize;
-         oldSize = filesystem::file_size(fileName);
+         if (fileName.size() >= 4 && fileName.substr(fileName.size() - 4) == ".txt") {
+        fileName.erase(fileName.size() - 4); // Remove the last 4 characters
+    }
+         oldSize = filesystem::file_size(fileName+".txt");
          huffmanTree.Zip(fileName);
          newSize = filesystem::file_size(fileName + ".huff");
          cout << "Compression Analysis:\n";
          cout << "Size before compression: " << oldSize << " bytes" << '\n';
          cout << "Size after compression: " << newSize << " bytes" << '\n';
-         cout << "Hiffman efficiency: " << (1-((oldSize - newSize)/oldSize))*100 << "%\033[0m" << '\n';
+         cout << "Hiffman efficiency: " << (((oldSize - newSize)/oldSize))*100 << "%\033[0m" << '\n';
       }
       else if (choice == 2)
       {

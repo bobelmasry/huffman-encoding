@@ -289,12 +289,9 @@ void HuffmanTree::DecodeCompressedFile(const string &inputFilename, const string
 
 void HuffmanTree::Zip(string filename)
 {
-    getFrequency(filename);
+    getFrequency(filename+".txt");
     buildHuffmanTree();
-    EncodeInput(filename);
-     if (filename.size() >= 4 && filename.substr(filename.size() - 4) == ".txt") {
-        filename.erase(filename.size() - 4); // Remove the last 4 characters
-    }
+    EncodeInput(filename+".txt");
     SaveCompressedFile(filename+".txt", filename+".huff");
 }
 

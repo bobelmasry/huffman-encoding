@@ -40,5 +40,5 @@ jobs:
 
     # Step 8: Run Google Tests
     - name: Run Tests
-      run: cd build && echo "This is some sample text for testing." > inputText.txt && ./huffman_encoding < 1 < ./inputText.txt < 2 < ./inputText.txt   && ./Tests/file_comparator_test
+      run: cd build && echo "This is some sample text for testing." > inputText.txt && ./huffman_encoding < ../instructions.txt  && ./Tests/file_comparator_test
     

@@ -1,0 +1,5 @@
+1
+inputText.txt
+2
+inputText.huff
+0

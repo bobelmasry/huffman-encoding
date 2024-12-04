@@ -5,6 +5,8 @@
       "filesystem": "cpp",
       "ostream": "cpp",
       "*.tcc": "cpp",
-      "limits": "cpp"
+      "limits": "cpp",
+      "string": "cpp",
+      "string_view": "cpp"
    }
 }
