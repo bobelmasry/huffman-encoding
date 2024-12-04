@@ -1,13 +1,12 @@
 #include "priorityqueue.h"
 #include <stdexcept>
 #include <algorithm> // For std::swap
-#include <algorithm> // For std::swap
-
+#include "huffmantree.h"
 template<typename T>
 priorityqueue<T>::priorityqueue(int initialCapacity)
     : capacity(initialCapacity), size(0)
 {
-    arr = new T[capacity];
+    arr = new T*[capacity];
 }
 
 template<typename T>
@@ -64,7 +63,7 @@ template<typename T>
 void priorityqueue<T>::doubleCapacity()
 {
     capacity *= 2;
-    T* newArr = new T[capacity];
+    T** newArr = new T*[capacity];
     for (int i = 0; i < size; ++i)
     {
         newArr[i] = arr[i];
@@ -148,7 +147,7 @@ T priorityqueue<T>::top() const
 
 
 template<typename T>
-int priorityqueue<T>::getSize() const
+int priorityqueue<T>::getSize() 
 {
     return size;
 }
@@ -158,3 +157,5 @@ bool priorityqueue<T>::isEmpty() const
 {
     return(size == 0) ;
 }
+
+template class priorityqueue<letter>;

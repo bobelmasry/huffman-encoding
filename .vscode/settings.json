@@ -8,6 +8,8 @@
       "limits": "cpp",
       "string": "cpp",
       "string_view": "cpp",
-      "vector": "cpp"
+      "vector": "cpp",
+      "chrono": "cpp",
+      "variant": "cpp"
    }
 }

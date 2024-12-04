@@ -1,12 +1,12 @@
 #ifndef PQ_H
 #define PQ_H
 using namespace std;
-#include "huffmantree.h"
 
 template<typename T>
 class priorityqueue
 {
-    T* arr;
+   
+    T** arr;
     int capacity;
     int size;
 
@@ -21,7 +21,7 @@ public:
     T pop();
     T top() const;
     void removeElement(const T& element);
-    int getSize() const;
+    int getSize() ;
     bool isEmpty() const;
 };
 
