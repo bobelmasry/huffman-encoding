@@ -4,7 +4,6 @@
 #include <iostream>
 #include <map>
 #include <queue>
-#include "priorityqueue.h"
 using namespace std;
 
 class HuffmanTree
@@ -32,7 +31,7 @@ private:
     letter *root; // root of the tree
     map<char, int> letterFrequency;
     string line;
-    priorityqueue<HuffmanTree::letter> pq;
+    pq priority_queue<letter>;
 
 public:
     HuffmanTree();
