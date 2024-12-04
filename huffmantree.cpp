@@ -2,6 +2,7 @@
 #include <fstream>
 #include <map>
 #include <queue>
+#include <string>
 #include "huffmantree.h"
 #include <string>
 #include <bitset>
@@ -18,7 +19,7 @@ HuffmanTree::HuffmanTree(const HuffmanTree &other)
 
 void HuffmanTree::getFrequency(const string &filename)
 {
-    ifstream inputFile(filename + ".txt");
+    ifstream inputFile(filename);
     if (inputFile)
     {
         char ch;
@@ -111,7 +112,7 @@ void HuffmanTree::EncodeInput(const string &filename)
     string compressedData;
     int firstline = 2;
     // Read the input text and encode it
-    ifstream inputFile(filename + ".txt");
+    ifstream inputFile(filename );
     if (inputFile)
     {
         char ch;
@@ -124,7 +125,7 @@ void HuffmanTree::EncodeInput(const string &filename)
     }
     else
     {
-        cout << "Error opening"<< filename+".txt"  <<" for reading" << endl;
+        cout << "Error opening"<< filename  <<" for reading" << endl;
         return;
     }
 }
@@ -150,10 +151,10 @@ void HuffmanTree::SaveCompressedFile(const string &inputFilename, const string &
     string compressedData;
     generateCodeMap(this->root, "", codes);
 
-    ifstream inputFile(inputFilename + ".txt");
+    ifstream inputFile(inputFilename );
     if (!inputFile)
     {
-        cout << "Error opening" << inputFilename + ".txt" << " for reading" << endl;
+        cout << "Error opening" << inputFilename  << " for reading" << endl;
         return;
     }
     char ch;
@@ -202,7 +203,7 @@ void HuffmanTree::SaveCompressedFile(const string &inputFilename, const string &
     }
 
     outputFile.close();
-    cout << "Successful Zipping To: " << outputFilename << endl;
+    cout << "\033[32mSuccessful Zipping To: " << outputFilename << endl;
 }
 
 void HuffmanTree::DecodeCompressedFile(const string &inputFilename, const string &outputFilename)
@@ -283,15 +284,18 @@ void HuffmanTree::DecodeCompressedFile(const string &inputFilename, const string
 
     inputFile.close();
     outputFile.close();
-    cout << "Successful UnZipping of :"<< inputFilename <<"\nTo: "<< outputFilename << endl;
+    cout << "\033[32mSuccessful UnZipping of :"<< inputFilename <<"\nTo: "<< outputFilename << endl;
 };
 
-void HuffmanTree::Zip(const string &filename)
+void HuffmanTree::Zip( string &filename)
 {
     getFrequency(filename);
     buildHuffmanTree();
     EncodeInput(filename);
-    SaveCompressedFile(filename, filename+".huff");
+     if (filename.size() >= 4 && filename.substr(filename.size() - 4) == ".txt") {
+        filename.erase(filename.size() - 4); // Remove the last 4 characters
+    }
+    SaveCompressedFile(filename+".txt", filename+".huff");
 }
 
 void HuffmanTree::UnZip(const string &filename)

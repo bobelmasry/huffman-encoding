@@ -41,7 +41,7 @@ public:
     void buildHuffmanTree(); // transforms the priority queue into a tree
     void ReBuildHuffmanTree(const map<string, char> &); // transforms the laod file into a tree
     void generateCodeMap(letter *, string, map<char, string> &);
-    void Zip(const string &);
+    void Zip( string &);
     void EncodeInput(const string &);
     void SaveCompressedFile(const string &,const string &);    
     void UnZip(const string &);

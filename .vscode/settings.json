@@ -1,6 +1,10 @@
 {
    "files.associations": {
       "*.ejs": "html",
-      "iostream": "cpp"
+      "iostream": "cpp",
+      "filesystem": "cpp",
+      "ostream": "cpp",
+      "*.tcc": "cpp",
+      "limits": "cpp"
    }
 }
