@@ -71,5 +71,6 @@ void UI()
          getline(cin, fileName);
          huffmanTree.UnZip(fileName);
       }
+      else cout << "Unsupported input\n";
    }
 }
