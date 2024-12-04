@@ -1,15 +1,12 @@
-#include <fstream>
-#include "huffmantree.h"
-using namespace std;
+#include "mainwindow.h"
 
-#include <filesystem>
-#include <iostream>
-#include "UI.cpp"
-using namespace std;
+#include <QApplication>
 
-int main()
+
+int main(int argc, char *argv[])
 {
-   HuffmanTree huffmanTree;
-    UI();
-    return 0;
+    QApplication a(argc, argv);
+    MainWindow w;
+    w.show();
+    return a.exec();
 }
