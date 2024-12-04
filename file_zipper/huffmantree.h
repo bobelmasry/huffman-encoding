@@ -1,9 +1,9 @@
 #ifndef HUFFMANTREE_H
 #define HUFFMANTREE_H
 
-#include <QString>
-#include <QMap>
+#include <map>
 #include <queue>
+#include <string>
 using namespace std;
 
 class HuffmanTree
@@ -29,23 +29,23 @@ private:
     };
 
     letter *root; // root of the tree
-    QMap<QChar, int> letterFrequency;
-    QString line;
+    map<char, int> letterFrequency;
+    string line;
     priority_queue<letter> pq;
 
 public:
     HuffmanTree();
     HuffmanTree(const HuffmanTree &);
     ~HuffmanTree();
-    void getFrequency(const QString &);     // get the frequency of all letters and store them in a map
+    void getFrequency(const string &);     // get the frequency of all letters and store them in a map
     void buildHuffmanTree(); // transforms the priority queue into a tree
-    void ReBuildHuffmanTree(const QMap<QString, QChar> &); // transforms the laod file into a tree
-    void generateCodeMap(letter *, QString, QMap<QChar, QString> &);
-    void Zip(const QString &);
-    void EncodeInput(const QString &);
-    void SaveCompressedFile(const QString &,const QString &);
-    void UnZip(const QString &);
-    void DecodeCompressedFile(const QString &, const QString &);
+    void ReBuildHuffmanTree(const map<string, char> &); // transforms the laod file into a tree
+    void generateCodeMap(letter *, string, map<char, string> &);
+    void Zip(const string &);
+    void EncodeInput(const string &);
+    void SaveCompressedFile(const string &,const string &);
+    void UnZip(const string &);
+    void DecodeCompressedFile(const string &, const string &);
     // DEBUGGING FUNCTIONS
     void PrintFrequency();
     void PrintCodes();

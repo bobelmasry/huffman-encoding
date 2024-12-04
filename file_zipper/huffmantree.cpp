@@ -1,10 +1,10 @@
+#include <iostream>
+#include <fstream>
 #include <map>
 #include <queue>
 #include "huffmantree.h"
-#include "QString"
+#include <string>
 #include <bitset>
-#include <QFile>
-#include <QDebug>
 using namespace std;
 
 HuffmanTree::HuffmanTree() {};
@@ -16,21 +16,20 @@ HuffmanTree::HuffmanTree(const HuffmanTree &other)
     pq = other.pq;
 };
 
-void HuffmanTree::getFrequency(const QString &filename)
+void HuffmanTree::getFrequency(const string &filename)
 {
-    QFile inputFile(filename + ".txt");
-    if (inputFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    ifstream inputFile(filename + ".txt");
+    if (inputFile)
     {
         char ch;
-        while (inputFile.read(&ch, 1) > 0)
+        while (inputFile.get(ch))
         {
             letterFrequency[ch]++;
         }
         inputFile.close();
-        // Filling the priority queue
         for (const auto &pair : letterFrequency)
         {
-            pq.push({pair.first, pair.second});
+            pq.push(letter(pair.first, pair.second));
         }
     }
     else
@@ -39,6 +38,7 @@ void HuffmanTree::getFrequency(const QString &filename)
         return;
     }
 }
+
 
 void HuffmanTree::buildHuffmanTree()
 {
@@ -62,13 +62,13 @@ void HuffmanTree::buildHuffmanTree()
     this->root = root;
 }
 
-void HuffmanTree::ReBuildHuffmanTree(const QMap<QString, QChar> &reverseCodes)
+void HuffmanTree::ReBuildHuffmanTree(const map<string, char> &reverseCodes)
 {
     root = new letter('\0');
     for (const auto &[code, ch] : reverseCodes)
     {
         letter *current = root;
-        for (QChar bit : code)
+        for (char bit : code)
         {
             if (bit == '0')
             {
@@ -87,7 +87,7 @@ void HuffmanTree::ReBuildHuffmanTree(const QMap<QString, QChar> &reverseCodes)
     }
 }
 
-void HuffmanTree::generateCodeMap(letter *node, QString code, map<char, QString> &codes)
+void HuffmanTree::generateCodeMap(letter *node, string code, map<char, string> &codes)
 {
     if (!node)
         return;
@@ -103,53 +103,56 @@ void HuffmanTree::generateCodeMap(letter *node, QString code, map<char, QString>
     generateCodeMap(node->right, code + "1", codes);
 }
 
-void HuffmanTree::EncodeInput(const QString &filename)
+void HuffmanTree::EncodeInput(const string &filename)
 {
-    map<char, QString> codes;
+    map<char, string> codes;
     generateCodeMap(this->root, "", codes);
-    QString compressedData;
+    string compressedData;
+    int firstline = 2;
     // Read the input text and encode it
-    QFile inputFile(filename + ".txt");
-    if (inputFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    ifstream inputFile(filename + ".txt");
+    if (inputFile)
     {
         char ch;
-        while (inputFile.read(&ch, 1) > 0)
+        while (inputFile.get(ch))
         {
+            // ch = tolower(ch); // Handle case sensitivity
             compressedData += codes[ch];
         };
         inputFile.close();
     }
     else
     {
-        qDebug() << "Error opening"<< filename+".txt"  <<" for reading \n";
+        cout << "Error opening"<< filename+".txt"  <<" for reading" << endl;
         return;
     }
 }
 
-void WriteBinaryString(ofstream &outputFile, const QString &binaryString)
+void WriteBinaryString(ofstream &outputFile, const string &binaryString)
 {
     int padding = (8 - binaryString.size() % 8) % 8; // calculating padding
-    QString paddedBinary = binaryString + QString(padding, '0');
+    string paddedBinary = binaryString + string(padding, '0');
 
     // add padding at the start of file
     outputFile.put(padding);
 
-    for (size_t i = 0; i < paddedBinary.size(); i += 8) {
+    for (size_t i = 0; i < paddedBinary.size(); i += 8)
+    {
         bitset<8> byte(paddedBinary.substr(i, 8));
         outputFile.put(static_cast<unsigned char>(byte.to_ulong()));
     }
 }
 
-void HuffmanTree::SaveCompressedFile(const QString &inputFilename, const QString &outputFilename)
+void HuffmanTree::SaveCompressedFile(const string &inputFilename, const string &outputFilename)
 {
-    map<char, QString> codes;
-    QString compressedData;
+    map<char, string> codes;
+    string compressedData;
     generateCodeMap(this->root, "", codes);
 
-    QFile inputFile(inputFilename + ".txt");
-    if (!inputFile.open())
+    ifstream inputFile(inputFilename + ".txt");
+    if (!inputFile)
     {
-        qDebug() << "Error opening" << inputFilename + ".txt" << "for reading" << "\n";
+        cout << "Error opening" << inputFilename + ".txt" << " for reading" << endl;
         return;
     }
     char ch;
@@ -166,7 +169,7 @@ void HuffmanTree::SaveCompressedFile(const QString &inputFilename, const QString
     ofstream outputFile(outputFilename, ios::binary);
     if (!outputFile)
     {
-        qDebug() << "Error opening " << outputFilename << " for writing" << "\n";
+        cout << "Error opening " << outputFilename << " for writing" << endl;
         return;
     }
 
@@ -179,7 +182,7 @@ void HuffmanTree::SaveCompressedFile(const QString &inputFilename, const QString
         outputFile.put(pair.first);
         outputFile.put(static_cast<char>(pair.second.size())); // each code is 1 byte
 
-        QString codeBits = pair.second;
+        string codeBits = pair.second;
         while (codeBits.size() % 8 != 0)
             codeBits += "0"; // padding for the code
 
@@ -198,132 +201,91 @@ void HuffmanTree::SaveCompressedFile(const QString &inputFilename, const QString
     }
 
     outputFile.close();
-    qDebug() << "Successful Zipping To: " << outputFilename << "\n";
+    cout << "Successful Zipping To: " << outputFilename << endl;
 }
 
-void HuffmanTree::DecodeCompressedFile(const QString &inputFilename, const QString &outputFilename)
+void HuffmanTree::DecodeCompressedFile(const string &inputFilename, const string &outputFilename)
 {
-
-    QFile inputFile(inputFilename); //qt reads text files in binary mode automatically, no need to change modes
-    if (!inputFile.open(QIODevice::ReadOnly))
+    ifstream inputFile(inputFilename, ios::binary);
+    if (!inputFile)
     {
-        qDebug() << "Error opening" << inputFilename << "for reading";
+        cout << "Error opening " << inputFilename << " for reading" << endl;
         return;
     }
 
     // Read the padding byte
-    unsigned char padding = 0;
-    if (inputFile.read(reinterpret_cast<char*>(&padding), 1) != 1)
-    {
-        qDebug() << "Error reading padding byte.";
-        inputFile.close();
-        return;
-    }
+    char padding;
+    inputFile.get(padding);
 
     // Read the number of codes
-    unsigned char codeCount = 0;
-    if (inputFile.read(reinterpret_cast<char*>(&codeCount), 1) != 1)
+    char codeCount;
+    inputFile.get(codeCount);
+
+    // Reconstruct the Huffman code map
+    map<string, char> reverseCodes;
+    for (int i = 0; i < static_cast<unsigned char>(codeCount); ++i)
     {
-        qDebug() << "Error reading code count.";
-        inputFile.close();
-        return;
-    }
+        char ch;
+        inputFile.get(ch);
 
-    QMap<QString, QChar> reverseCodes;
-    for (int i = 0; i < static_cast<int>(codeCount); ++i)
-    {
-        unsigned char ch = 0;
-        if (inputFile.read(reinterpret_cast<char*>(&ch), 1) != 1)
+        char codeSize;
+        inputFile.get(codeSize);
+
+        string codeBits;
+        for (int j = 0; j < static_cast<unsigned char>(codeSize); j += 8)
         {
-            qDebug() << "Error reading character.";
-            inputFile.close();
-            return;
+            char byte;
+            inputFile.get(byte);
+            bitset<8> bits(byte);
+            codeBits += bits.to_string();
         }
 
-        unsigned char codeSize = 0;
-        if (inputFile.read(reinterpret_cast<char*>(&codeSize), 1) != 1)
-        {
-            qDebug() << "Error reading code size.";
-            inputFile.close();
-            return;
-        }
-
-        QString codeBits;
-        int bytesToRead = (codeSize + 7) / 8;  // Calculate the number of bytes required for the bits
-        QByteArray codeData = inputFile.read(bytesToRead);
-        if (codeData.size() != bytesToRead)
-        {
-            qDebug() << "Error reading Huffman code bits.";
-            inputFile.close();
-            return;
-        }
-
-        for (char byte : codeData)
-        {
-            std::bitset<8> bits(byte);
-            codeBits += QString::fromStdString(bits.to_string());
-        }
-
-        // Trim the string to the actual size of the Huffman code (since the last byte may contain extra bits)
-        codeBits = codeBits.left(static_cast<int>(codeSize));
-
-        reverseCodes[codeBits] = QChar(ch);
+        reverseCodes[codeBits.substr(0, static_cast<unsigned char>(codeSize))] = ch;
     }
 
     // Build the Huffman tree from the codes
     ReBuildHuffmanTree(reverseCodes);
 
     // Read the compressed data
-    QString binaryData;
-    while (!inputFile.atEnd())
+    string binaryData;
+    while (inputFile.peek() != EOF)
     {
         char byte;
-        if (inputFile.read(&byte, 1) != 1)
-        {
-            qDebug() << "Error reading compressed data.";
-            inputFile.close();
-            return;
-        }
-
-        // Convert byte to binary string
-        std::bitset<8> bits(byte);
-        binaryData += QString::fromStdString(bits.to_string());
+        inputFile.get(byte);
+        bitset<8> bits(byte);
+        binaryData += bits.to_string();
     }
 
     // Remove the padding bits from the end
-    binaryData = binaryData.left(binaryData.size() - static_cast<int>(padding));
+    binaryData = binaryData.substr(0, binaryData.size() - padding);
 
-    inputFile.close();
-
-    // Open the output file for writing
-    QFile outputFile(outputFilename);
-    if (!outputFile.open(QIODevice::WriteOnly | QIODevice::Text))
+    // Decode the binary data using the Huffman tree
+    ofstream outputFile(outputFilename);
+    if (!outputFile)
     {
-        qDebug() << "Error opening" << outputFilename << "for writing";
+        cout << "Error opening " << outputFilename << " for writing" << endl;
         return;
     }
 
-    QTextStream out(&outputFile);
-
-    // Decode the binary data using the Huffman tree
     letter *current = root;
-    for (QChar bit : binaryData)
+    for (char bit : binaryData)
     {
         current = (bit == '0') ? current->left : current->right;
 
         // If a leaf node is reached, output the character
         if (!current->left && !current->right)
         {
-            out << current->ch;
+            outputFile.put(current->ch);
             current = root;
         }
     }
 
+    inputFile.close();
     outputFile.close();
-    qDebug() << "Successful UnZipping of:" << inputFilename << "to:" << outputFilename;
-}
+    cout << "Successful UnZipping of :"<< inputFilename <<"\nTo: "<< outputFilename << endl;
+};
 
-void HuffmanTree::Zip(const QString &filename)
+void HuffmanTree::Zip(const string &filename)
 {
     getFrequency(filename);
     buildHuffmanTree();
@@ -331,9 +293,8 @@ void HuffmanTree::Zip(const QString &filename)
     SaveCompressedFile(filename, filename+".huff");
 }
 
-void HuffmanTree::UnZip(const QString &filename)
+void HuffmanTree::UnZip(const string &filename)
 {
-
     DecodeCompressedFile(filename , "Decompressed.txt");
 }
 
@@ -341,7 +302,7 @@ void HuffmanTree::UnZip(const QString &filename)
 
 void HuffmanTree::PrintCodes()
 {
-    map<char, QString> codes;
+    map<char, string> codes;
     generateCodeMap(this->root, "", codes);
 
     // output the codes
@@ -349,7 +310,7 @@ void HuffmanTree::PrintCodes()
     cout << "Huffman Codes: " << endl;
     for (const auto &pair : codes)
     {
-        qDebug() << pair.first << ": " << pair.second << "\n";
+        cout << pair.first << ": " << pair.second << endl;
     }
 }
 
