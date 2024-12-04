@@ -4,6 +4,8 @@
 #include <queue>
 #include <string>
 #include "huffmantree.h"
+#include "priorityqueue.h"
+
 #include <string>
 #include <bitset>
 using namespace std;
@@ -44,7 +46,7 @@ void HuffmanTree::getFrequency(const string &filename)
 
 void HuffmanTree::buildHuffmanTree()
 {
-    while (pq.size() > 1)
+    while (pq.getSize() > 1)
     {
         letter *left = new letter(pq.top());
         pq.pop();

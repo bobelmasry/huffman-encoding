@@ -6,7 +6,9 @@ add_executable(
     huffman_encoding
     main.cpp
         huffmantree.h
-        huffmantree.cpp)
+        huffmantree.cpp
+        priorityqueue.cpp
+        priorityqueue.h)
         enable_testing()
         add_subdirectory(Tests)
 
