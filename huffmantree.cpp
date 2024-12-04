@@ -153,7 +153,7 @@ void HuffmanTree::SaveCompressedFile(const string &inputFilename, const string &
     ifstream inputFile(inputFilename + ".txt");
     if (!inputFile)
     {
-        cout << "Error opening" << inputFilename + ".txt" << "for reading" << endl;
+        cout << "Error opening" << inputFilename + ".txt" << " for reading" << endl;
         return;
     }
     char ch;
@@ -296,7 +296,6 @@ void HuffmanTree::Zip(const string &filename)
 
 void HuffmanTree::UnZip(const string &filename)
 {
-
     DecodeCompressedFile(filename , "Decompressed.txt");
 }
 
