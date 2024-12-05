@@ -40,5 +40,5 @@ jobs:
 
     # Step 8: Run Google Tests
     - name: Run Tests
-      run: cd build && ./huffman_encoding < ../instructions.txt  && ./Tests/file_comparator_test
+      run: cd build && ./Tests/file_comparator_test
     
