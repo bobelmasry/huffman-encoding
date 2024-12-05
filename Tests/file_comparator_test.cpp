@@ -2,23 +2,17 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include <thread>
 #include "../huffmantree.h"
 using namespace std;
 bool areFilesIdentical(const string& filePath1, const string& filePath2) {
-    ofstream outfile(filePath1);
     ifstream file2(filePath2, ios::binary);
-    outfile << "Lorem Ipsum is simply dummy text of the printing and typesetting industry.\n Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the\n release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." << std::endl;
-    outfile.close();
-    //Zip and UNzip
-    HuffmanTree huffmanTree;
-    huffmanTree.Zip("inputText");
-    huffmanTree.UnZip("inputText.huff");
     ifstream file1(filePath1,ios::binary);
     if (!file1.is_open() || !file2.is_open()) {
         cout << "Error: Could not open one or both files." << endl;
         return false; // Return false if either file cannot be opened
     }
-
+    
     // Compare file sizes first (optional, but more efficient)
     file1.seekg(0, ios::end);
     file2.seekg(0, ios::end);
@@ -52,9 +46,16 @@ bool areFilesIdentical(const string& filePath1, const string& filePath2) {
 }
 
 TEST(FileComparatorTest, FilesAreIdentical) {
+
     string filePath1 = "inputText.txt";
     string filePath2 = "Decompressed.txt";
+    ofstream outfile(filePath1);
 
+ outfile << "Lorem Ipsum is simply dummy text of the printing and typesetting industry.\n Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the\n release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." << std::endl;
+    outfile.close();
+      HuffmanTree huffmanTree;
+    huffmanTree.Zip("inputText");
+    huffmanTree.UnZip("inputText.huff");
     ASSERT_TRUE(areFilesIdentical(filePath1, filePath2)) << "Files are not identical!";
 }
 
