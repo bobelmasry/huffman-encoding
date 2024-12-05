@@ -23,9 +23,7 @@ The **Huffman File Zipper** is a file compression utility built to efficiently c
 
 ## **Project Structure**
 ```
-Huffman-File-Zipper/
-├── .vscode/
-│   └── settings.json             # VSCode settings for the project
+Huffman-File-Zipper/           
 ├── Additional Features/
 │   └── EncryptionCode.cpp        # Additional encryption features
 ├── GUI_bonus/
