@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>File Zipping Tool</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLabel" name="titleLabel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>760</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string>
+      QLabel {
+          font-size: 24px;
+          font-weight: bold;
+          color: #2c3e50;
+      }
+     </string>
+    </property>
+    <property name="text">
+     <string>Zip Your Files Effortlessly</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="filepath">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>100</y>
+      <width>600</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string>
+      QLineEdit {
+          border: 2px solid #2980b9;
+          border-radius: 10px;
+          padding: 5px;
+          font-size: 16px;
+      }
+     </string>
+    </property>
+    <property name="placeholderText">
+     <string>Enter the file or folder path...</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="browseButton">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>100</y>
+      <width>120</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string>
+      QPushButton {
+          background-color: #2980b9;
+          color: white;
+          font-size: 16px;
+          border-radius: 10px;
+      }
+      QPushButton:hover {
+          background-color: #3498db;
+      }
+     </string>
+    </property>
+    <property name="text">
+     <string>Browse</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="zipButton">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>490</y>
+      <width>160</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string>
+      QPushButton {
+          background-color: #27ae60;
+          color: white;
+          font-size: 18px;
+          border-radius: 10px;
+          font-weight: bold;
+      }
+      QPushButton:hover {
+          background-color: #2ecc71;
+      }
+     </string>
+    </property>
+    <property name="text">
+     <string>Zip Files</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="Text_insertion">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>180</y>
+      <width>760</width>
+      <height>280</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string>
+      QTextEdit {
+          border: 2px solid #bdc3c7;
+          border-radius: 10px;
+          font-size: 14px;
+          padding: 5px;
+      }
+     </string>
+    </property>
+    <property name="placeholderText">
+     <string>Log output will appear here...</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>70</y>
+      <width>221</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Insert file path</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>150</y>
+      <width>221</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Input text you want to ZIP</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="UnzipButton">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>490</y>
+      <width>160</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string>
+      QPushButton {
+          background-color: #27ae60;
+          color: white;
+          font-size: 18px;
+          border-radius: 10px;
+          font-weight: bold;
+      }
+      QPushButton:hover {
+          background-color: #2ecc71;
+      }
+     </string>
+    </property>
+    <property name="text">
+     <string>UnZip Files</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionExit"/>
+   </widget>
+   <addaction name="menuFile"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
