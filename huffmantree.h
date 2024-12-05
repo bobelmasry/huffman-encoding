@@ -5,36 +5,8 @@
 #include <map>
 using namespace std;
 // #include <queue>
-#include "priorityqueue.h"
+#include "lib/priorityqueue.h"
 
-struct letter
-{
-    char ch;
-    int frequency;
-    letter *left;
-    letter *right; // used to make the tree
-
-    letter(char c, int freq=0) : ch(c), frequency(freq), left(nullptr), right(nullptr)
-    {
-    }
-    bool operator<(const letter &other) const
-    {
-        return frequency > other.frequency; // bigger than as max heap
-    }
-    bool operator<=(const letter &other) const
-    {
-        return frequency >= other.frequency; // bigger than as max heap
-    }
-    bool operator>(const letter &other) const
-    {
-        return frequency < other.frequency; // bigger than as max heap
-    }
-   
-     bool operator==(const letter &other) const
-    {
-        return frequency == other.frequency; // bigger than as max heap
-    }
-};
 class HuffmanTree
 {
 private:

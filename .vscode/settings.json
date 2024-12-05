@@ -10,6 +10,14 @@
       "string_view": "cpp",
       "vector": "cpp",
       "chrono": "cpp",
-      "variant": "cpp"
+      "variant": "cpp",
+      "format": "cpp",
+      "array": "cpp",
+      "bitset": "cpp",
+      "initializer_list": "cpp",
+      "span": "cpp",
+      "deque": "cpp",
+      "random": "cpp",
+      "semaphore": "cpp"
    }
 }

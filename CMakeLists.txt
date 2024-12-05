@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Add priorityqueue as a library
 add_library(priorityqueue STATIC
-    priorityqueue.cpp  # The source file for the priority queue
+    lib/priorityqueue.cpp  # The source file for the priority queue
 )
 
 # Add the executable for the main program
@@ -15,8 +15,8 @@ add_executable(
     main.cpp
     huffmantree.h
     huffmantree.cpp
-    priorityqueue.h 
-    priorityqueue.cpp
+    lib/priorityqueue.h 
+    lib/priorityqueue.cpp
 
 )
 
@@ -29,3 +29,4 @@ target_link_libraries(huffman_encoding PRIVATE priorityqueue)
 # Enable testing (if you have tests)
 enable_testing()
 add_subdirectory(Tests)
+

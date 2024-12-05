@@ -4,7 +4,6 @@
 #include <queue>
 #include <string>
 #include "huffmantree.h"
-#include "priorityqueue.h"
 
 #include <string>
 #include <bitset>
@@ -27,14 +26,14 @@ void HuffmanTree::getFrequency(const string &filename)
         char ch;
         while (inputFile.get(ch))
         {
-                // ch = tolower(ch);
-                letterFrequency[ch]++;
+            // ch = tolower(ch);
+            letterFrequency[ch]++;
         }
         inputFile.close();
         // Filling the priority queue
         for (const auto &pair : letterFrequency)
         {
-            pq.push({pair.first, pair.second});
+            pq.push(pair.first, pair.second);
         }
     }
     else
@@ -48,9 +47,9 @@ void HuffmanTree::buildHuffmanTree()
 {
     while (pq.getSize() > 1)
     {
-        letter *left = new letter(pq.top());
+        letter *left = pq.top();
         pq.pop();
-        letter *right = new letter(pq.top());
+        letter *right = pq.top();
         pq.pop();
 
         // create a combined node
@@ -58,9 +57,9 @@ void HuffmanTree::buildHuffmanTree()
         combined->left = left;
         combined->right = right;
 
-        pq.push(*combined);
+        pq.push(combined);
     }
-    letter *root = new letter(pq.top());
+    letter *root = pq.top();
     pq.pop();
 
     this->root = root;
@@ -114,20 +113,20 @@ void HuffmanTree::EncodeInput(const string &filename)
     string compressedData;
     int firstline = 2;
     // Read the input text and encode it
-    ifstream inputFile(filename );
+    ifstream inputFile(filename);
     if (inputFile)
     {
         char ch;
         while (inputFile.get(ch))
         {
-                // ch = tolower(ch); // Handle case sensitivity
-                compressedData += codes[ch];
+            // ch = tolower(ch); // Handle case sensitivity
+            compressedData += codes[ch];
         };
         inputFile.close();
     }
     else
     {
-        cout << "Error opening"<< filename  <<" for reading" << endl;
+        cout << "Error opening" << filename << " for reading" << endl;
         return;
     }
 }
@@ -153,16 +152,16 @@ void HuffmanTree::SaveCompressedFile(const string &inputFilename, const string &
     string compressedData;
     generateCodeMap(this->root, "", codes);
 
-    ifstream inputFile(inputFilename );
+    ifstream inputFile(inputFilename);
     if (!inputFile)
     {
-        cout << "Error opening" << inputFilename  << " for reading" << endl;
+        cout << "Error opening" << inputFilename << " for reading" << endl;
         return;
     }
     char ch;
     while (inputFile.get(ch))
     {
-            compressedData += codes[ch];
+        compressedData += codes[ch];
     }
     inputFile.close();
 
@@ -246,7 +245,7 @@ void HuffmanTree::DecodeCompressedFile(const string &inputFilename, const string
 
         reverseCodes[codeBits.substr(0, static_cast<unsigned char>(codeSize))] = ch;
     }
-    
+
     // Build the Huffman tree from the codes
     ReBuildHuffmanTree(reverseCodes);
 
@@ -286,20 +285,20 @@ void HuffmanTree::DecodeCompressedFile(const string &inputFilename, const string
 
     inputFile.close();
     outputFile.close();
-    cout << "\033[32mSuccessful UnZipping of :"<< inputFilename <<"\nTo: "<< outputFilename << endl;
+    cout << "\033[32mSuccessful UnZipping of :" << inputFilename << "\nTo: " << outputFilename << endl;
 };
 
 void HuffmanTree::Zip(string filename)
 {
-    getFrequency(filename+".txt");
+    getFrequency(filename + ".txt");
     buildHuffmanTree();
-    EncodeInput(filename+".txt");
-    SaveCompressedFile(filename+".txt", filename+".huff");
+    EncodeInput(filename + ".txt");
+    SaveCompressedFile(filename + ".txt", filename + ".huff");
 }
 
 void HuffmanTree::UnZip(const string &filename)
 {
-    DecodeCompressedFile(filename , "Decompressed.txt");
+    DecodeCompressedFile(filename, "Decompressed.txt");
 }
 
 // DEBUGGING FUNCTIONS
@@ -337,6 +336,5 @@ void HuffmanTree::PrintFrequency()
             cout << pair.first << ": " << pair.second << endl;
     }
 }
-
 
 HuffmanTree::~HuffmanTree() {};
