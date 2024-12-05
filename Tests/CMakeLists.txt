@@ -14,6 +14,8 @@ enable_testing()
 add_executable(
     file_comparator_test
     file_comparator_test.cpp
+    ../huffmantree.cpp  # Add the Huffman tree source file
+    ../lib/priorityqueue.cpp  # Include the priority queue source
 )
 
 # Link Google Test

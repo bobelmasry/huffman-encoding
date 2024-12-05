@@ -2,54 +2,58 @@
 #include <fstream>
 #include <string>
 #include <iostream>
-
-bool areFilesIdentical(const std::string& filePath1, const std::string& filePath2) {
-    std::ifstream file1(filePath1, std::ios::binary);
-    std::ifstream file2(filePath2, std::ios::binary);
-
+#include "../huffmantree.h"
+using namespace std;
+bool areFilesIdentical(const string& filePath1, const string& filePath2) {
+    ofstream outfile(filePath1);
+    ifstream file2(filePath2, ios::binary);
+    outfile << "Lorem Ipsum is simply dummy text of the printing and typesetting industry.\n Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the\n release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." << std::endl;
+    outfile.close();
+    //Zip and UNzip
+    HuffmanTree huffmanTree;
+    huffmanTree.Zip("inputText");
+    huffmanTree.UnZip("inputText.huff");
+    ifstream file1(filePath1,ios::binary);
     if (!file1.is_open() || !file2.is_open()) {
-        std::cout << "Error: Could not open one or both files." << std::endl;
+        cout << "Error: Could not open one or both files." << endl;
         return false; // Return false if either file cannot be opened
     }
 
     // Compare file sizes first (optional, but more efficient)
-    file1.seekg(0, std::ios::end);
-    file2.seekg(0, std::ios::end);
-    std::streampos size1 = file1.tellg();
-    std::streampos size2 = file2.tellg();
+    file1.seekg(0, ios::end);
+    file2.seekg(0, ios::end);
+    streampos size1 = file1.tellg();
+    streampos size2 = file2.tellg();
     if (size1 != size2) {
-        std::cout << "Files are different sizes. Size1: " << size1 << ", Size2: " << size2 << std::endl;
-        return false; // Files are different sizes
+        cout << "Files are different sizes. Size1: " << size1 << ", Size2: " << size2 << endl;
+        return false; 
     }
 
     // Return to beginning of files
-    file1.seekg(0, std::ios::beg);
-    file2.seekg(0, std::ios::beg);
+    file1.seekg(0, ios::beg);
+    file2.seekg(0, ios::beg);
 
     // Compare files character by character
     char char1, char2;
-    int position = 0; // To track character position in the file
     while (file1.get(char1) && file2.get(char2)) {
         if (char1 != char2) {
-            std::cout << "Files differ at position " << position << ". Char1: '" << char1 << "', Char2: '" << char2 << "'" << std::endl;
-            return false; // Return false if any character is different
+            return false; 
         }
-        position++;
     }
 
     // Make sure both files have reached the end
     if (file1.get(char1) || file2.get(char2)) {
-        std::cout << "Files have different lengths after reaching EOF. One file still has more data." << std::endl;
-        return false; // If one file has more data left
+        cout << "Files have different lengths after reaching EOF. One file still has more data." << endl;
+        return false;
     }
 
-    std::cout << "Files are identical." << std::endl;
+    cout << "Files are identical." << endl;
     return true;
 }
 
 TEST(FileComparatorTest, FilesAreIdentical) {
-    std::string filePath1 = "inputText.txt";
-    std::string filePath2 = "Decompressed.txt";
+    string filePath1 = "inputText.txt";
+    string filePath2 = "Decompressed.txt";
 
     ASSERT_TRUE(areFilesIdentical(filePath1, filePath2)) << "Files are not identical!";
 }
