@@ -54,7 +54,7 @@ void UI()
          cout << "Compression Analysis:\n";
          cout << "Size before compression: " << oldSize << " bytes" << '\n';
          cout << "Size after compression: " << newSize << " bytes" << '\n';
-         cout << "Hiffman efficiency: " << (1 - ((oldSize - newSize) / oldSize)) * 100 << "%\033[0m" << '\n';
+         cout << "Hiffman efficiency: " << ( ((oldSize - newSize) / oldSize)) * 100 << "%\033[0m" << '\n';
       }
       else if (choice == 2)
       {
