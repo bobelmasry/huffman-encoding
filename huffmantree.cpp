@@ -35,6 +35,7 @@ void HuffmanTree::getFrequency(const string &filename)
         {
             pq.push(pair.first, pair.second);
         }
+        
     }
     else
     {
@@ -47,6 +48,7 @@ void HuffmanTree::buildHuffmanTree()
 {
     while (pq.getSize() > 1)
     {
+       
         letter *left = pq.top();
         pq.pop();
         letter *right = pq.top();

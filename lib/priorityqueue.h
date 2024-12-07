@@ -4,7 +4,7 @@ using namespace std;
 #include <vector>
 struct letter
 {
-    char ch;
+    char ch='\0';
     int frequency;
     letter *left;
     letter *right; // used to make the tree
