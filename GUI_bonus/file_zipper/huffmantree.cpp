@@ -312,7 +312,11 @@ void HuffmanTree::DecodeCompressedFile(const string &inputFilename, const string
 
 void HuffmanTree::Zip(string filename)
 {
-    getFrequency(filename);
+    if (filename.size() >= 4 && filename.substr(filename.size() - 4) == ".txt")
+    {
+        filename.erase(filename.size() - 4); // Remove the last 4 characters
+    }
+    getFrequency(filename+ ".txt");
     if (letterFrequency.empty())
     {
         cout << "Frequency map is empty. Cannot proceed with compression." << endl;
@@ -324,8 +328,8 @@ void HuffmanTree::Zip(string filename)
         cout << "Huffman tree is not built. Cannot proceed with compression." << endl;
         return;
     }
-    EncodeInput(filename);
-    SaveCompressedFile(filename, filename + ".huff");
+    EncodeInput(filename+ ".txt");
+    SaveCompressedFile(filename+ ".txt", filename + ".huff");
 }
 
 void HuffmanTree::UnZip(const string &filename)
