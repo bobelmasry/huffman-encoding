@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <map>
+#include <string>
 using namespace std;
 // #include <queue>
 #include "lib/priorityqueue.h"
@@ -28,6 +29,7 @@ public:
     void SaveCompressedFile(const string &, const string &);
     void UnZip(const string &);
     void DecodeCompressedFile(const string &, const string &);
+    long long getFileSize(const string &); // added function declaration
     // DEBUGGING FUNCTIONS
     void PrintFrequency();
     void PrintCodes();

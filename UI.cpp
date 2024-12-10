@@ -1,9 +1,8 @@
 #include <fstream>
 #include "huffmantree.h"
-using namespace std;
-
-#include <filesystem>
+#include <limits>
 #include <iostream>
+using namespace std;
 
 void UI()
 {
@@ -26,31 +25,22 @@ void UI()
       cout << "[2] To Unzip a File " << endl;
       cout << "\033[31m[0] Quit\033[36m" << endl;
       cin >> choice;
-      filesystem::path dir = filesystem::current_path();
       HuffmanTree huffmanTree;
       if (choice == 1)
       {
          cout << "Files in the Active Directory:\n";
-         for (const auto &entry : filesystem::directory_iterator(dir))
-         {
-            // Check if the entry is a regular file and has a .txt extension
-            if (entry.is_regular_file() && entry.path().extension() == ".txt")
-            {
-               std::cout << entry.path().filename() << "\n";
-            }
-         }
          cout << "Enter the name of the file (or the Absoloute path): ";
          string fileName;
-         cin.ignore(numeric_limits<streamsize>::max(), '\n');
+         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
          getline(cin, fileName);
          double oldSize, newSize;
          if (fileName.size() >= 4 && fileName.substr(fileName.size() - 4) == ".txt")
          {
             fileName.erase(fileName.size() - 4); // Remove the last 4 characters
          }
-         oldSize = filesystem::file_size(fileName + ".txt");
+         oldSize = huffmanTree.getFileSize(fileName + ".txt");
          huffmanTree.Zip(fileName);
-         newSize = filesystem::file_size(fileName + ".huff");
+         newSize = huffmanTree.getFileSize(fileName + ".huff");
          cout << "Compression Analysis:\n";
          cout << "Size before compression: " << oldSize << " bytes" << '\n';
          cout << "Size after compression: " << newSize << " bytes" << '\n';
@@ -59,17 +49,9 @@ void UI()
       else if (choice == 2)
       {
          cout << "Files in the Active Directory:\n";
-         for (const auto &entry : filesystem::directory_iterator(dir))
-         {
-            // Check if the entry is a regular file and has a .txt extension
-            if (entry.is_regular_file() && entry.path().extension() == ".huff")
-            {
-               std::cout << entry.path().filename() << "\n";
-            }
-         }
          cout << "Enter the name of the file (or the Absoloute path): ";
          string fileName;
-         cin.ignore(numeric_limits<streamsize>::max(), '\n');
+         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
          getline(cin, fileName);
          huffmanTree.UnZip(fileName);
       }

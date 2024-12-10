@@ -70,8 +70,9 @@ void HuffmanTree::buildHuffmanTree()
 void HuffmanTree::ReBuildHuffmanTree(const map<string, char> &reverseCodes)
 {
     root = new letter('\0');
-    for (const auto &[code, ch] : reverseCodes)
-    {
+    for (const auto &pair : reverseCodes) {
+        const string& code = pair.first;
+        char ch = pair.second;
         letter *current = root;
         for (char bit : code)
         {
@@ -301,6 +302,12 @@ void HuffmanTree::Zip(string filename)
 void HuffmanTree::UnZip(const string &filename)
 {
     DecodeCompressedFile(filename, "Decompressed.txt");
+}
+
+long long HuffmanTree::getFileSize(const string& fileName) {
+    ifstream file(fileName, ios::binary | ios::ate);
+    if (!file.is_open()) return 0;
+    return file.tellg();
 }
 
 // DEBUGGING FUNCTIONS
