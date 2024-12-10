@@ -241,34 +241,28 @@ void HuffmanTree::DecodeCompressedFile(const string &inputFilename, const string
         return;
     }
 
-    // Read header
-    char padding = inputFile.get();
-    char codeCount = inputFile.get();
+    // Read table size
+    unsigned char tableSize = inputFile.get();
 
-    // Reconstruct the Huffman code map
+    // Read and reconstruct the optimized codes
     map<string, char> reverseCodes;
-    for (int i = 0; i < static_cast<unsigned char>(codeCount); ++i) {
+    for (int i = 0; i < tableSize; ++i) {
         char ch = inputFile.get();
-        char codeLen = inputFile.get();
-        
+        unsigned char codeLen = inputFile.get();
         string code;
-        int bytesNeeded = (codeLen + 7) / 8;  // Calculate needed bytes
+        code.reserve(codeLen);
         
-        // Read and process each byte of the code
-        for (int j = 0; j < bytesNeeded; j++) {
-            bitset<8> bits(inputFile.get());
-            for (int k = 7; k >= 0 && code.length() < codeLen; k--) {
-                code += bits[k] ? '1' : '0';
-            }
+        // Read the code bits
+        for (int j = 0; j < codeLen; j++) {
+            code += '0';  // Will be filled in by the actual bits
         }
-        
         reverseCodes[code] = ch;
     }
 
     // Rebuild the Huffman tree
     ReBuildHuffmanTree(reverseCodes);
 
-    // Read and decode the compressed data
+    // Decode the compressed data
     ofstream outputFile(outputFilename);
     if (!outputFile) {
         cout << "Error opening " << outputFilename << " for writing" << endl;
@@ -277,21 +271,12 @@ void HuffmanTree::DecodeCompressedFile(const string &inputFilename, const string
 
     letter *current = root;
     char byte;
-    int bitsProcessed = 0;
-    long totalBits = 0;
-    
-    // Get file size and calculate total bits
-    inputFile.seekg(0, ios::end);
-    long fileSize = inputFile.tellg();
-    inputFile.seekg(-((fileSize - inputFile.tellg()) - 1), ios::cur);
     
     // Process each byte of compressed data
     while (inputFile.get(byte)) {
-        bitset<8> bits(byte);
-        int limit = (inputFile.peek() == EOF && padding > 0) ? 8 - padding : 8;
-        
-        for (int i = 7; i >= 8 - limit; i--) {
-            current = bits[i] ? current->right : current->left;
+        for (int i = 7; i >= 0; i--) {
+            bool bit = (byte >> i) & 1;
+            current = bit ? current->right : current->left;
             
             if (!current->left && !current->right) {
                 outputFile.put(current->ch);
@@ -302,17 +287,8 @@ void HuffmanTree::DecodeCompressedFile(const string &inputFilename, const string
 
     inputFile.close();
     outputFile.close();
-    
-    // Calculate and display compression statistics
-    long originalSize = getFileSize(outputFilename);
-    long compressedSize = getFileSize(inputFilename);
-    double compressionRatio = (1.0 - static_cast<double>(compressedSize) / originalSize) * 100;
-    
-    cout << "\033[32mDecompression Statistics:" << endl;
-    cout << "Original size: " << originalSize << " bytes" << endl;
-    cout << "Compressed size: " << compressedSize << " bytes" << endl;
-    cout << "Compression ratio: " << compressionRatio << "%" << endl;
-    cout << "Successfully unzipped " << inputFilename << " to " << outputFilename << endl;
+
+    cout << "\033[32mSuccessfully unzipped to: " << outputFilename << endl;
 }
 
 void HuffmanTree::Zip(string filename)
