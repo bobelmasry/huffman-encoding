@@ -249,13 +249,21 @@ void HuffmanTree::DecodeCompressedFile(const string &inputFilename, const string
     for (int i = 0; i < tableSize; ++i) {
         char ch = inputFile.get();
         unsigned char codeLen = inputFile.get();
+        
+        // Read the actual code bits
+        unsigned char codeByte;
         string code;
         code.reserve(codeLen);
+        int bitsRead = 0;
         
-        // Read the code bits
-        for (int j = 0; j < codeLen; j++) {
-            code += '0';  // Will be filled in by the actual bits
+        while (bitsRead < codeLen) {
+            if (bitsRead % 8 == 0) {
+                codeByte = inputFile.get();
+            }
+            code += ((codeByte >> (7 - (bitsRead % 8))) & 1) ? '1' : '0';
+            bitsRead++;
         }
+        
         reverseCodes[code] = ch;
     }
 
