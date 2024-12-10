@@ -1,32 +1,24 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.10)
 project(huffman_encoding)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# Add priorityqueue as a library
-add_library(priorityqueue STATIC
-    lib/priorityqueue.cpp  # The source file for the priority queue
+# Add Google Test
+include(FetchContent)
+FetchContent_Declare(
+    googletest
+    URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
 )
+FetchContent_MakeAvailable(googletest)
 
-# Add the executable for the main program
-add_executable(
-    huffman_encoding
-    main.cpp
-    huffmantree.h
-    huffmantree.cpp
-    lib/priorityqueue.h 
-    lib/priorityqueue.cpp
-
-)
-
-# Link the priorityqueue library to the executable
-target_link_libraries(huffman_encoding PRIVATE priorityqueue)
-
-# Include the header files for the target (this ensures it can find priorityqueue.h)
-
-
-# Enable testing (if you have tests)
+# Enable testing
 enable_testing()
-add_subdirectory(Tests)
+
+# Add main executable
+add_executable(huffman main.cpp huffmantree.cpp lib/priorityqueue.cpp)
+
+# Add test executable
+add_executable(tests Tests/file_comparator_test.cpp huffmantree.cpp lib/priorityqueue.cpp)
+target_link_libraries(tests gtest gtest_main)
+
+# Add tests
+add_test(NAME tests COMMAND tests)
 
