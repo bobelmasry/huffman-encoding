@@ -1,14 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <map>
-#include <queue>
-#include <string>
 #include "huffmantree.h"
-
-#include <string>
-#include <bitset>
-using namespace std;
-
 HuffmanTree::HuffmanTree() {};
 
 HuffmanTree::HuffmanTree(const HuffmanTree &other)
@@ -108,12 +98,11 @@ void HuffmanTree::generateCodeMap(letter *node, string code, map<char, string> &
     generateCodeMap(node->right, code + "1", codes);
 }
 
-void HuffmanTree::EncodeInput(const string &filename)
+string HuffmanTree::EncodeInput(const string &filename)
 {
     map<char, string> codes;
     generateCodeMap(this->root, "", codes);
     string compressedData;
-    int firstline = 2;
     // Read the input text and encode it
     ifstream inputFile(filename);
     if (inputFile)
@@ -125,11 +114,11 @@ void HuffmanTree::EncodeInput(const string &filename)
             compressedData += codes[ch];
         };
         inputFile.close();
+        return compressedData;
     }
     else
     {
         cout << "Error opening" << filename << " for reading" << endl;
-        return;
     }
 }
 
@@ -151,22 +140,9 @@ void WriteBinaryString(ofstream &outputFile, const string &binaryString)
 void HuffmanTree::SaveCompressedFile(const string &inputFilename, const string &outputFilename)
 {
     map<char, string> codes;
-    string compressedData;
+    string compressedData = EncodeInput(inputFilename);
     generateCodeMap(this->root, "", codes);
-
-    ifstream inputFile(inputFilename);
-    if (!inputFile)
-    {
-        cout << "Error opening" << inputFilename << " for reading" << endl;
-        return;
-    }
-    char ch;
-    while (inputFile.get(ch))
-    {
-        compressedData += codes[ch];
-    }
-    inputFile.close();
-
+    
     // Calculate padding
     int padding = (8 - compressedData.size() % 8) % 8;
     string paddedBinary = compressedData + string(padding, '0'); // adding padding

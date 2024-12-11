@@ -1,9 +1,8 @@
 #include <fstream>
-#include "huffmantree.h"
-using namespace std;
-
 #include <filesystem>
 #include <iostream>
+#include "huffmantree.h"
+using namespace std;
 
 void UI()
 {
@@ -36,7 +35,7 @@ void UI()
             // Check if the entry is a regular file and has a .txt extension
             if (entry.is_regular_file() && entry.path().extension() == ".txt")
             {
-               std::cout << entry.path().filename() << "\n";
+               cout << entry.path().filename() << "\n";
             }
          }
          cout << "Enter the name of the file (or the Absoloute path): ";
@@ -54,7 +53,7 @@ void UI()
          cout << "Compression Analysis:\n";
          cout << "Size before compression: " << oldSize << " bytes" << '\n';
          cout << "Size after compression: " << newSize << " bytes" << '\n';
-         cout << "Hiffman efficiency: " << ( ((oldSize - newSize) / oldSize)) * 100 << "%\033[0m" << '\n';
+         cout << "Huffman efficiency: " << ( ((oldSize - newSize) / oldSize)) * 100 << "%\033[0m" << '\n';
       }
       else if (choice == 2)
       {
@@ -67,7 +66,7 @@ void UI()
                std::cout << entry.path().filename() << "\n";
             }
          }
-         cout << "Enter the name of the file (or the Absoloute path): ";
+         cout << "Enter the name of the file (or the absolute path): ";
          string fileName;
          cin.ignore(numeric_limits<streamsize>::max(), '\n');
          getline(cin, fileName);

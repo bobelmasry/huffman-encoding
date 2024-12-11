@@ -1,7 +1,8 @@
 #ifndef PQ_H
 #define PQ_H
-using namespace std;
+#include <iostream>
 #include <vector>
+using namespace std;
 struct letter
 {
     char ch='\0';
@@ -17,7 +18,7 @@ struct letter
     }
     bool operator>(const letter &other) const
     {
-        return frequency < other.frequency; // bigger than as max heap
+        return frequency < other.frequency; // bigger than as min heap
     }
    
 };
